@@ -1,2 +1,6 @@
 ## Function Headers 
-findHash(filename, *&fp)
+`findHashLoc(filename, *&fp)` 
+
+- returns a pointer to the end of the line on which the hash is stored
+
+`
