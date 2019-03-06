@@ -1,2 +1,2 @@
-# P2P_Netorks_Project
+# P2P_Networks_Project
 Peer to peer file syncing over UDP
