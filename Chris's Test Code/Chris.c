@@ -1,14 +1,13 @@
+/* Chris's Code */
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 
-/* Justin's Code */
-
-/* Chris's Code */
 /*
- parameters: a string of the filename thats needs its hash updated
- return value: a FILE pointer to the location immediately after the found hash
+parameters: a string of the filename thats needs its hash updated
+return value: a FILE pointer to the location immediately after the found hash
  */
 FILE* findHashLoc(char fileName[]){
     FILE* fp = fopen("hash.txt", "r+");
@@ -27,9 +26,9 @@ FILE* findHashLoc(char fileName[]){
 }
 
 /*
- parameters: poiter to a FILE pointer (or reference in our case)
- and a string of new hash value
- return value: returns non-negative value upon success, EOF on Error
+parameters: poiter to a FILE pointer (or reference in our case)
+and a string of new hash value
+return value: returns non-negative value upon success, EOF on Error
  */
 int updateHash(FILE** loc_ptr, char newHash[32]){
     fseek(*loc_ptr, -32, SEEK_CUR);
@@ -38,6 +37,15 @@ int updateHash(FILE** loc_ptr, char newHash[32]){
     fflush(*loc_ptr);
     return a;
 }
-/* Matti's Code */
 
-/* Keegan's Code */
+
+
+
+int main(int argc, char const *argv[]) {
+    /* code */
+    char fileN[] = "file2.c";
+    FILE* hashLoc = findHashLoc(fileN);
+    updateHash(&hashLoc, "ChrisNelsonTest2ChrisNelsonTest1");
+
+    return 0;
+}
