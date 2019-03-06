@@ -1,8 +1,14 @@
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <arpa/inet.h>
 
-/* Justin's Code */
+#define PORT 8050
 
-/* Chris's Code */
-
-/* Keegan's Code */
-
-/* Matti's Code */
+int sendToPeer(char *fileName, char *hash, char *peerIP);
