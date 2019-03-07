@@ -80,6 +80,7 @@ void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
     while (fscanf(fp, "%s", ip) != EOF) {
         sendToPeer(fileName, hash, ip);
     }
+    fclose(fp);
 }
 
 /*
