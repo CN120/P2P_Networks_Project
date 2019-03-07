@@ -13,18 +13,8 @@
 #define PORT 8050
 #define SIZE 100
 
-void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
-    FILE* fp;
-    int n;
-    char ip[15];
-    fp = fopen("peers.txt", "rb");
-    while (fscanf(fp, "%s", ip) != EOF) {
-        sendToPeer(fileName, hash, ip);
-    }
-}
-
 // Send file and hash to a single peer with IP address peerIP
-int sendToPeer(char *fileName, char *hash, char *peerIP)
+int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
 {
      int socketfd, bytes_read;
      char	buffer[SIZE];
@@ -70,7 +60,7 @@ int sendToPeer(char *fileName, char *hash, char *peerIP)
      write (socketfd, fileName, strlen(fileName));
 
      // Send hash of file to server
-     write(socketfd, hash, strlen(hash));
+     write(socketfd, hash, strlen((char *)hash));
 
      // Read from source file and transmit to server SIZE bytes
      // at a time
@@ -81,6 +71,15 @@ int sendToPeer(char *fileName, char *hash, char *peerIP)
      close (socketfd);
 
      return 0;
+}
+
+void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
+    FILE* fp;
+    char ip[15];
+    fp = fopen("peers.txt", "rb");
+    while (fscanf(fp, "%s", ip) != EOF) {
+        sendToPeer(fileName, hash, ip);
+    }
 }
 
 /*
@@ -110,7 +109,7 @@ FILE* findHashLoc(char fileName[50]) {
  */
 int updateHash(FILE** loc_ptr, unsigned char newHash[32]){
     fseek(*loc_ptr, -32, SEEK_CUR);
-    int a = fputs(newHash, *loc_ptr);
+    int a = fputs((char *)newHash, *loc_ptr);
     //fprintf(*loc_ptr, "%s", newHash);
     fflush(*loc_ptr);
     return a;
@@ -121,16 +120,15 @@ int updateHash(FILE** loc_ptr, unsigned char newHash[32]){
     return value: returns the hash in an unsigned char array
 */
 unsigned char* hashFile(char fileName[50]) {
-    int n;
     MD5_CTX c;
     char buf[512];
     ssize_t bytes;
-    unsigned char out[MD5_DIGEST_LENGTH];
+    unsigned char* out = malloc (sizeof (char) * MD5_DIGEST_LENGTH);
     MD5_Init(&c);
     FILE* fp;
 
     fp = fopen(fileName, "rb");
-    while(bytes = fread(buf, sizeof(char), 512, fp) > 0) {
+    while((bytes = fread(buf, sizeof(char), 512, fp)) > 0) {
         MD5_Update(&c, buf, bytes);
     }
 
