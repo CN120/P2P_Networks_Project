@@ -8,7 +8,7 @@ Justin Cole, Chris Nelson */
 int main(int argc, char* argv[]) {
   FILE* hashfp;
   char filename[50];
-  unsigned char oldHash[32], newHash[32];
+  unsigned char oldHash[32], *newHash;
 
   // open hash.txt for reading
   hashfp = fopen("hash.txt", "r");
@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     // new hash
 		newHash = hashFile(filename);
 		if (newHash != oldHash) {
-			updateHash(&fp, newHash);
+			updateHash(&hashfp, newHash);
 			sendToAllPeers(filename, newHash);
 		}
 	}
