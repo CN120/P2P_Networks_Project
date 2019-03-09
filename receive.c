@@ -1,4 +1,5 @@
 /* Capstone project- Application Layer
+File Syncer
 Keegan Papakipos, Matti Masten,
 Justin Cole, Chris Nelson */
 
