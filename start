@@ -1,4 +1,3 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
 
-gcc -o receive receive.c
 ./receive &
