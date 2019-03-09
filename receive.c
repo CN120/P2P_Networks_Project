@@ -1,14 +1,10 @@
-/* Capstone project- Application Layer
-Keegan Papakipos, Matti Masten,
-Justin Cole, Chris Nelson */
-
 #include "header.h"
 
 int main(int argc, char* argv[]) {
 	int listenfd = 0, connfd = 0;
 	FILE *newFile, *locationPointer;
 	struct sockaddr_in serv_addr;
-	char buff[BUFFER_SIZE], filename[50];
+	char buff[1000], filename[50];
 	unsigned char fileHash[32];
 
 	// set up socket on port defined in header.h (currently 8050)
@@ -41,12 +37,11 @@ int main(int argc, char* argv[]) {
 		read (connfd, filename, sizeof(filename));
 		newFile = fopen(filename, "w");
 		// receive file hash, find hash location, update hash
-		read(connfd, fileHash, sizeof(fileHash));
+		read (connfd, fileHash, sizeof(fileHash));
 		locationPointer = findHashLoc(filename);
 		updateHash(&locationPointer, hashFile(filename));
 		while (read (connfd, buff, sizeof (buff)) > 0) {
 			// append received data to file TODO
-
 		}
 		// close connection
 		close (connfd);
