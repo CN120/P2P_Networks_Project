@@ -11,13 +11,13 @@
 #include <openssl/md5.h>
 
 #define PORT 8050
-#define SIZE 100
+#define BUFFER_SIZE 100
 
 // Send file and hash to a single peer with IP address peerIP
 int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
 {
      int socketfd, bytes_read;
-     char	buffer[SIZE];
+     char	buffer[BUFFER_SIZE];
      struct sockaddr_in server_address;
      FILE	*src_fp;
 
