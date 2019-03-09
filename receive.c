@@ -1,3 +1,7 @@
+/* Capstone project- Application Layer
+Keegan Papakipos, Matti Masten,
+Justin Cole, Chris Nelson */
+
 #include "header.h"
 
 int main(int argc, char* argv[]) {

@@ -1,3 +1,7 @@
+/* Capstone project- Application Layer
+Keegan Papakipos, Matti Masten,
+Justin Cole, Chris Nelson */
+
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -64,7 +68,7 @@ int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
 
      // Read from source file and transmit to server SIZE bytes
      // at a time
-     while ((bytes_read = fread (buffer, sizeof (char), SIZE, src_fp)) > 0)
+     while ((bytes_read = fread (buffer, sizeof (char), BUFFER_SIZE, src_fp)) > 0)
           write (socketfd, buffer, bytes_read);
 
      fclose (src_fp);
