@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 	struct sockaddr_in serv_addr;
 	char buff[BUFFER_SIZE], filename[50];
 	unsigned char fileHash[32];
-
+	int bytesRead;
 	// set up socket on port defined in header.h (currently 8050)
 	memset (&serv_addr, '0', sizeof (serv_addr));
 	memset (buff, '0', sizeof (buff));
@@ -44,9 +44,9 @@ int main(int argc, char* argv[]) {
 		read(connfd, fileHash, sizeof(fileHash));
 		locationPointer = findHashLoc(filename);
 		updateHash(&locationPointer, hashFile(filename));
-		while (read (connfd, buff, sizeof (buff)) > 0) {
+		while ((bytesRead = read (connfd, buff, sizeof (buff))) > 0) {
 			// append received data to file TODO
-
+			fwrite(buff, sizeof(char), bytesRead, newFile); 
 		}
 		// close connection
 		close (connfd);
