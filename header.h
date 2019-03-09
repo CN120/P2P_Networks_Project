@@ -73,6 +73,10 @@ int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
      return 0;
 }
 
+/*
+parameters: 50 length char filename, 32 length unsigned char hash
+runs sendToPeer on all peers listed in peers.txt
+*/
 void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
     FILE* fp;
     char ip[15];
