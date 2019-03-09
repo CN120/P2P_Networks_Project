@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[]) {
 	int listenfd = 0, connfd = 0;
-	FILE* newFile, locationPointer;
+	FILE *newFile, *locationPointer;
 	struct sockaddr_in serv_addr;
 	char buff[1000], filename[50];
 	unsigned char fileHash[32];
