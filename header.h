@@ -86,7 +86,7 @@ runs sendToPeer on all peers listed in peers.txt
 void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
     FILE* fp;
     char ip[15];
-    fp = fopen("./Repo/peers.txt", "rb");
+    fp = fopen("peers.txt", "rb");
     while (fscanf(fp, "%s", ip) != EOF) {
         sendToPeer(fileName, hash, ip);
     }
@@ -105,11 +105,11 @@ FILE* findHashLoc(char fileName[50]) {
     do {
         num = fscanf(fp, "%s %s", fn_store, hashVal);
         if(strcmp(fn_store, fileName)==0){
-            printf("found %s & %s in hash.txt\n", fn_store, hashVal);
-            return fp; //file pointer to end of line with hash
+            printf("found %s & %s\n", fn_store, hashVal);
+            return fp; //file pointer to ed of line with hash
         }
     } while(num!=EOF);
-    printf("failed to find %s in hash.txt\n", fileName);
+    printf("failed to find %s\n", fileName);
     return NULL;
 }
 
@@ -152,6 +152,11 @@ unsigned char* readHash(FILE** fp) {
     fseek(*fp, -32, SEEK_CUR);
     fread(hash, sizeof(char), 32, *fp);
     return hash;
+}   
+void addHash(char *filename, unsigned char *newHash) {
+    FILE *writefp = fopen("hash.txt", "wa");
+    fprintf(writefp, "\n%s %s", filename, newHash);
+    fclose(writefp);
 }
 /*
 void checkFiles(DIR *dr) {
@@ -164,7 +169,7 @@ void checkFiles(DIR *dr) {
                 sendToAllPeers(filename, newHash);
             }
         }
-
+            
     }
 }
 */

@@ -43,7 +43,11 @@ int main(int argc, char* argv[]) {
 		// receive file hash, find hash location, update hash
 		read(connfd, fileHash, sizeof(fileHash));
 		locationPointer = findHashLoc(filename);
-		updateHash(&locationPointer, hashFile(filename));
+		if (locationPointer == NULL) {
+			addHash(filename, fileHash);
+		} else {
+			updateHash(&locationPointer, fileHash);
+		}
 		while ((bytesRead = read (connfd, buff, sizeof (buff))) > 0) {
 			// append received data to file TODO
 			fwrite(buff, sizeof(char), bytesRead, newFile);

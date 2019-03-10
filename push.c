@@ -5,13 +5,12 @@ Justin Cole, Chris Nelson */
 #include "header.h"
 
 int main(int argc, char* argv[]) {
-  FILE *readfp, *writefp;
+  FILE *readfp;
   char filename[50];
   char directPath[50] = "./Repo/";
   struct dirent *de;
   unsigned char *oldHash, *newHash;
   // open hash.txt for writing
-  writefp = fopen("hash.txt", "wa");
       printf("%s\n", "opened hash");
   //open repo
   DIR *dr = opendir("./Repo");
@@ -22,6 +21,7 @@ int main(int argc, char* argv[]) {
 	while ((de = readdir(dr)) != NULL) {
 	// new hash
 		if (de->d_name[0] != '.') {
+			memset(filename, 0, 50);
 			strcpy(filename, directPath);
 			strcat(filename, de->d_name);
 			printf("%s\n", filename);
@@ -34,13 +34,11 @@ int main(int argc, char* argv[]) {
 					sendToAllPeers(filename, newHash);
 				}
 			} else {
-				printf("writing\n");
-				fprintf(writefp, "\n%s %s", filename, newHash);
+				addHash(filename, newHash);
 				printf("sending\n");
 				sendToAllPeers(filename, newHash);
 			}
 		}
 
 	}
-	fclose(writefp);
 }
