@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
 				printf("%s\n", newHash);
 				printf("%s\n", oldHash);
 				if (strcmp( (char *)newHash, (char *)oldHash) != 0) {
+					printf("FILE UPDATED\n");
 					updateHash(&readfp, newHash);
 					sendToAllPeers(filename, newHash);
 				}

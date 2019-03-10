@@ -156,7 +156,7 @@ unsigned char* readHash(FILE** fp) {
     return hash;
 }
 void addHash(char *filename, unsigned char *newHash) {
-    FILE *writefp = fopen("hash.txt", "wa");
+    FILE *writefp = fopen("hash.txt", "a");
     fprintf(writefp, "\n%s %s", filename, newHash);
     fclose(writefp);
 }
