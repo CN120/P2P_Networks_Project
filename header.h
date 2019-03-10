@@ -122,10 +122,14 @@ FILE* findHashLoc(char fileName[50]) {
  */
 int updateHash(FILE** loc_ptr, unsigned char newHash[32]){
     fseek(*loc_ptr, -32, SEEK_CUR);
-    int a = fputs((char *)newHash, *loc_ptr);
-    //fprintf(*loc_ptr, "%s", newHash);
-    fflush(*loc_ptr);
+    int a = fwrite(newHash, 1, 32, *loc_ptr);
     return a;
+
+    /* previous code */
+    //int a = fputs((char *)newHash, *loc_ptr);
+    //fprintf(*loc_ptr, "%s", newHash);
+    //fflush(*loc_ptr);
+
 }
 
 /*
