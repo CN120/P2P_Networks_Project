@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 		updateHash(&locationPointer, hashFile(filename));
 		while ((bytesRead = read (connfd, buff, sizeof (buff))) > 0) {
 			// append received data to file TODO
-			fwrite(buff, sizeof(char), bytesRead, newFile); 
+			fwrite(buff, sizeof(char), bytesRead, newFile);
 		}
 		// close connection
 		close (connfd);
