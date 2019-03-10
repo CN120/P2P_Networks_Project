@@ -105,7 +105,7 @@ FILE* findHashLoc(char fileName[50]) {
         num = fscanf(fp, "%s %s", fn_store, hashVal);
         if(strcmp(fn_store, fileName)==0){
             printf("found %s & %s\n", fn_store, hashVal);
-            return fp; //file pointer to ed of line with hash
+            return fp; //file pointer to end of line with hash
         }
     } while(num!=EOF);
     printf("failed to find %s\n", fileName);
