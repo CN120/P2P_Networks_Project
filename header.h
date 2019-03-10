@@ -109,7 +109,7 @@ FILE* findHashLoc(char fileName[50]) {
         }
     } while(num!=EOF);
     printf("failed to find %s\n", fileName);
-    return fp;
+    return NULL;
 }
 
 /*
