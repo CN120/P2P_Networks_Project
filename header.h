@@ -86,7 +86,7 @@ runs sendToPeer on all peers listed in peers.txt
 void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
     FILE* fp;
     char ip[15];
-    fp = fopen("peers.txt", "rb");
+    fp = fopen("./Repo/peers.txt", "rb");
     while (fscanf(fp, "%s", ip) != EOF) {
         sendToPeer(fileName, hash, ip);
     }

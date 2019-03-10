@@ -11,8 +11,11 @@ int main(int argc, char* argv[]) {
   unsigned char *oldHash, *newHash;
   // open hash.txt for writing
   writefp = fopen("hash.txt", "wa");
+      printf("%s\n", "opened hash");
+
   //open repo
-  DIR *dr = opendir("./repo");
+  DIR *dr = opendir("./Repo");
+        printf("%s\n", "opened directory");
 
   // save old filename and hash
   //fscanf(hashfp, "%s %s\n", filename, oldHash) != EOF
@@ -32,4 +35,5 @@ int main(int argc, char* argv[]) {
 		}
 		
 	}
+	fclose(writefp);
 }
