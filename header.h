@@ -1,5 +1,4 @@
 /* Capstone project- Application Layer
-File Syncer
 Keegan Papakipos, Matti Masten,
 Justin Cole, Chris Nelson */
 
@@ -14,6 +13,8 @@ Justin Cole, Chris Nelson */
 #include <errno.h>
 #include <arpa/inet.h>
 #include <openssl/md5.h>
+#include <dirent.h>
+
 
 #define PORT 8050
 #define BUFFER_SIZE 100
@@ -105,7 +106,7 @@ FILE* findHashLoc(char fileName[50]) {
         num = fscanf(fp, "%s %s", fn_store, hashVal);
         if(strcmp(fn_store, fileName)==0){
             printf("found %s & %s\n", fn_store, hashVal);
-            return fp; //file pointer to end of line with hash
+            return fp; //file pointer to ed of line with hash
         }
     } while(num!=EOF);
     printf("failed to find %s\n", fileName);
@@ -146,3 +147,24 @@ unsigned char* hashFile(char fileName[50]) {
     fclose(fp);
     return out;
 }
+unsigned char* readHash(FILE** fp) {
+    unsigned char* hash = malloc (sizeof (char) * MD5_DIGEST_LENGTH);
+    fseek(*fp, -32, SEEK_CUR);
+    fread(hash, sizeof(char), 32, *fp);
+    return hash;
+}   
+/*
+void checkFiles(DIR *dr) {
+    struct dirent *de;
+    while (de = readdir(dr) != NULL) {
+        if () {
+            newHash = hashFile(filename);
+            if (newHash != oldHash) {
+                updateHash(&hashfp, newHash);
+                sendToAllPeers(filename, newHash);
+            }
+        }
+            
+    }
+}
+*/

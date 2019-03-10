@@ -1,24 +1,35 @@
 /* Capstone project- Application Layer
-File Syncer
 Keegan Papakipos, Matti Masten,
 Justin Cole, Chris Nelson */
 
 #include "header.h"
 
 int main(int argc, char* argv[]) {
-  FILE* hashfp;
+  FILE *readfp, *writefp;
   char filename[50];
-  unsigned char oldHash[32], *newHash;
+  struct dirent *de;
+  unsigned char *oldHash, *newHash;
+  // open hash.txt for writing
+  writefp = fopen("hash.txt", "wa");
+  //open repo
+  DIR *dr = opendir("./repo");
 
-  // open hash.txt for reading
-  hashfp = fopen("hash.txt", "r");
   // save old filename and hash
-	while (fscanf(hashfp, "%s %s\n", filename, oldHash) != EOF) {
-    // new hash
-		newHash = hashFile(filename);
-		if (newHash != oldHash) {
-			updateHash(&hashfp, newHash);
+  //fscanf(hashfp, "%s %s\n", filename, oldHash) != EOF
+	while ((de = readdir(dr)) != NULL) {
+	// new hash
+		newHash = hashFile(de->d_name);
+		readfp = findHashLoc(de->d_name);
+		if (readfp != NULL) {
+			oldHash = readHash(&readfp);
+			if (strcmp( (char *)newHash, (char *)oldHash) == 0) {
+				updateHash(&readfp, newHash);
+				sendToAllPeers(filename, newHash);
+			}
+		} else {
+			fwrite( (char *)newHash, sizeof(char), 32, writefp);
 			sendToAllPeers(filename, newHash);
 		}
+		
 	}
 }
