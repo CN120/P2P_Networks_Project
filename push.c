@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
 					updateHash(&readfp, newHash);
 					sendToAllPeers(filename, newHash);
 				}
+                    free(oldHash);
 			} else {
 				printf("%s\n", (char *)newHash);
 				addHash(filename, newHash);
@@ -44,6 +45,5 @@ int main(int argc, char* argv[]) {
 			}
 		}
           free(newHash);
-          free(oldHash);
 	}
 }
