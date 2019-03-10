@@ -102,7 +102,7 @@ void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
 FILE* findHashLoc(char fileName[50]) {
     FILE* fp = fopen("hash.txt", "r+");
     char hashVal[32];
-    char fn_store[50];  //stores filenames read in from fscanf
+    char fn_store[50];  //will store filenames read in from fscanf
     int num;
     do {
         num = fscanf(fp, "%s %s", fn_store, hashVal);
