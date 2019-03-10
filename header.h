@@ -64,9 +64,11 @@ int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
 
      // Send name of file to server
      write (socketfd, fileName, strlen(fileName));
+     read (socketfd, buffer, 1);
 
      // Send hash of file to server
      write(socketfd, hash, strlen((char *)hash));
+     read (socketfd, buffer, 1);
 
      // Read from source file and transmit to server SIZE bytes
      // at a time
@@ -152,7 +154,7 @@ unsigned char* readHash(FILE** fp) {
     fseek(*fp, -32, SEEK_CUR);
     fread(hash, sizeof(char), 32, *fp);
     return hash;
-}   
+}
 void addHash(char *filename, unsigned char *newHash) {
     FILE *writefp = fopen("hash.txt", "wa");
     fprintf(writefp, "\n%s %s", filename, newHash);
@@ -169,7 +171,7 @@ void checkFiles(DIR *dr) {
                 sendToAllPeers(filename, newHash);
             }
         }
-            
+
     }
 }
 */

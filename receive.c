@@ -11,6 +11,8 @@ int main(int argc, char* argv[]) {
 	char buff[BUFFER_SIZE], filename[50];
 	unsigned char fileHash[32];
 	int bytesRead;
+	char	response_char = '\0';
+
 	// set up socket on port defined in header.h (currently 8050)
 	memset (&serv_addr, '0', sizeof (serv_addr));
 	memset (buff, '0', sizeof (buff));
@@ -39,9 +41,15 @@ int main(int argc, char* argv[]) {
 		}
 		// receive filename, open file for writing
 		read (connfd, filename, sizeof(filename));
+		write (connfd, &response_char, 1);
+		printf("Received filename = %s\n", filename);
+
 		newFile = fopen(filename, "w");
 		// receive file hash, find hash location, update hash
 		read(connfd, fileHash, sizeof(fileHash));
+		write (connfd, &response_char, 1);
+		printf("Received hash = %s\n", fileHash);
+
 		locationPointer = findHashLoc(filename);
 		if (locationPointer == NULL) {
 			addHash(filename, fileHash);
@@ -49,6 +57,7 @@ int main(int argc, char* argv[]) {
 			updateHash(&locationPointer, fileHash);
 		}
 		while ((bytesRead = read (connfd, buff, sizeof (buff))) > 0) {
+			printf("Got into reading the file.\n");
 			// append received data to file TODO
 			fwrite(buff, sizeof(char), bytesRead, newFile);
 		}
