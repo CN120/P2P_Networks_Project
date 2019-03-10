@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 				oldHash = readHash(&readfp);
 				printf("%s\n", newHash);
 				printf("%s\n", oldHash);
-				if (memcmp(newHash, oldHash) == 0) {
+				if (memcmp(newHash, oldHash, 32) != 0) {
 					printf("FILE UPDATED\n");
 					updateHash(&readfp, newHash);
 					sendToAllPeers(filename, newHash);
