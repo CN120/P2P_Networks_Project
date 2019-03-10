@@ -62,6 +62,7 @@ int main(int argc, char* argv[]) {
 			fwrite(buff, sizeof(char), bytesRead, newFile);
 		}
 		// close connection
+		fclose(newFile);
 		close (connfd);
 	}
 	return 0;
