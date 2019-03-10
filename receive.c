@@ -1,5 +1,4 @@
 /* Capstone project- Application Layer
-File Syncer
 Keegan Papakipos, Matti Masten,
 Justin Cole, Chris Nelson */
 
@@ -9,7 +8,7 @@ int main(int argc, char* argv[]) {
 	int listenfd = 0, connfd = 0;
 	FILE *newFile, *locationPointer;
 	struct sockaddr_in serv_addr;
-	char buff[1000], filename[50];
+	char buff[BUFFER_SIZE], filename[50];
 	unsigned char fileHash[32];
 	int bytesRead;
 	// set up socket on port defined in header.h (currently 8050)
@@ -42,11 +41,12 @@ int main(int argc, char* argv[]) {
 		read (connfd, filename, sizeof(filename));
 		newFile = fopen(filename, "w");
 		// receive file hash, find hash location, update hash
-		read (connfd, fileHash, sizeof(fileHash));
+		read(connfd, fileHash, sizeof(fileHash));
 		locationPointer = findHashLoc(filename);
 		updateHash(&locationPointer, hashFile(filename));
 		while ((bytesRead = read (connfd, buff, sizeof (buff))) > 0) {
 			// append received data to file TODO
+			fwrite(buff, sizeof(char), bytesRead, newFile); 
 		}
 		// close connection
 		close (connfd);
