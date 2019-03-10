@@ -105,11 +105,11 @@ FILE* findHashLoc(char fileName[50]) {
     do {
         num = fscanf(fp, "%s %s", fn_store, hashVal);
         if(strcmp(fn_store, fileName)==0){
-            printf("found %s & %s\n", fn_store, hashVal);
-            return fp; //file pointer to ed of line with hash
+            printf("found %s & %s in hash.txt\n", fn_store, hashVal);
+            return fp; //file pointer to end of line with hash
         }
     } while(num!=EOF);
-    printf("failed to find %s\n", fileName);
+    printf("failed to find %s in hash.txt\n", fileName);
     return NULL;
 }
 
@@ -152,7 +152,7 @@ unsigned char* readHash(FILE** fp) {
     fseek(*fp, -32, SEEK_CUR);
     fread(hash, sizeof(char), 32, *fp);
     return hash;
-}   
+}
 /*
 void checkFiles(DIR *dr) {
     struct dirent *de;
@@ -164,7 +164,7 @@ void checkFiles(DIR *dr) {
                 sendToAllPeers(filename, newHash);
             }
         }
-            
+
     }
 }
 */
