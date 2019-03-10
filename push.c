@@ -43,6 +43,7 @@ int main(int argc, char* argv[]) {
 				sendToAllPeers(filename, newHash);
 			}
 		}
-
+          free(newHash);
+          free(oldHash);
 	}
 }
