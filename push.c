@@ -29,7 +29,9 @@ int main(int argc, char* argv[]) {
 			readfp = findHashLoc(filename);
 			if (readfp != NULL) {
 				oldHash = readHash(&readfp);
-				if (strcmp( (char *)newHash, (char *)oldHash) == 0) {
+				printf("%s\n", newHash);
+				printf("%s\n", oldHash);
+				if (strcmp( (char *)newHash, (char *)oldHash) != 0) {
 					updateHash(&readfp, newHash);
 					sendToAllPeers(filename, newHash);
 				}
