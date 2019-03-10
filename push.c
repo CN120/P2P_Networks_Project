@@ -29,11 +29,11 @@ int main(int argc, char* argv[]) {
 			readfp = findHashLoc(filename);
 			if (readfp != NULL) {
 				oldHash = readHash(&readfp);
-				if (strcmp( (char *)newHash, (char *)oldHash) == 0) {
+				if (memcmp(newHash, oldHash) == 0) {
 					updateHash(&readfp, newHash);
 					sendToAllPeers(filename, newHash);
 				}
-                    free(oldHash);
+                free(oldHash);
 			} else {
 				printf("%s\n", (char *)newHash);
 				addHash(filename, newHash);
