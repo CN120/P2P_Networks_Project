@@ -34,8 +34,10 @@ int main(int argc, char* argv[]) {
 					sendToAllPeers(filename, newHash);
 				}
 			} else {
+				printf("%s\n", (char *)newHash);
 				addHash(filename, newHash);
 				printf("sending\n");
+				printf("%s\n", newHash);
 				sendToAllPeers(filename, newHash);
 			}
 		}

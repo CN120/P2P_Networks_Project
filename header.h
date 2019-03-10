@@ -67,7 +67,7 @@ int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
      read (socketfd, buffer, 1);
 
      // Send hash of file to server
-     write(socketfd, hash, strlen((char *)hash));
+     write(socketfd, (char *)hash, strlen((char *)hash));
      read (socketfd, buffer, 1);
 
      // Read from source file and transmit to server SIZE bytes
