@@ -20,7 +20,7 @@ Justin Cole, Chris Nelson */
 #define BUFFER_SIZE 100
 
 // Send file and hash to a single peer with IP address peerIP
-int sendToPeer(char *fileName, char *hash, char *peerIP)
+int sendToPeer(char fileName[50], char hash[32], char *peerIP)
 {
      int socketfd, bytes_read;
      char	buffer[BUFFER_SIZE];
@@ -64,11 +64,13 @@ int sendToPeer(char *fileName, char *hash, char *peerIP)
      }
 
      // Send name of file to server
-     write (socketfd, fileName, strlen(fileName));
+     printf("About to send filename: %s\n", fileName);
+     write (socketfd, fileName, strlen(fileName)+1);
      read (socketfd, buffer, 1);
 
      // Send hash of file to server
-     write(socketfd, hash, strlen(hash));
+     printf("About to send hash: %s\n", hash);
+     write(socketfd, hash, strlen(hash)+1);
      read (socketfd, buffer, 1);
 
      // Read from source file and transmit to server SIZE bytes
