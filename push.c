@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
   char filename[50];
   char directPath[50] = "./Repo/";
   struct dirent *de;
-  unsigned char oldHash[32], newHash[32];
+  unsigned char oldHash[MD5_DIGEST_LENGTH], newHash[MD5_DIGEST_LENGTH];
   // open hash.txt for writing
       printf("%s\n", "opened hash");
   //open repo
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 				readHash(&readfp, oldHash);
 				printf("%s\n", newHash);
 				printf("%s\n", oldHash);
-				if (memcmp(newHash, oldHash, 32) != 0) {
+				if (memcmp(newHash, oldHash, MD5_DIGEST_LENGTH) != 0) {
 					printf("FILE UPDATED\n");
 					updateHash(&readfp, newHash);
 					sendToAllPeers(filename, newHash);

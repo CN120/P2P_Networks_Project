@@ -86,7 +86,7 @@ int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
 parameters: 50 length char filename, 32 length unsigned char hash
 runs sendToPeer on all peers listed in peers.txt
 */
-void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
+void sendToAllPeers(char fileName[50],  unsigned char hash[MD5_DIGEST_LENGTH]) {
     FILE* fp;
     char ip[15];
     fp = fopen("peers.txt", "rb");
@@ -103,7 +103,7 @@ void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
  */
 FILE* findHashLoc(char fileName[50]) {
     FILE* fp = fopen("hash.txt", "r+");
-    char hashVal[32];
+    char hashVal[MD5_DIGEST_LENGTH];
     char fn_store[50];  //will store filenames read in from fscanf
     int num;
     do {
@@ -122,9 +122,9 @@ FILE* findHashLoc(char fileName[50]) {
  and a string of new hash value
  return value: returns non-negative value upon success, EOF on Error
  */
-int updateHash(FILE** loc_ptr, unsigned char newHash[32]){
-    fseek(*loc_ptr, -32, SEEK_CUR);
-    int a = fwrite(newHash, 1, 32, *loc_ptr);
+int updateHash(FILE** loc_ptr, unsigned char newHash[MD5_DIGEST_LENGTH]){
+    fseek(*loc_ptr, -1 * MD5_DIGEST_LENGTH, SEEK_CUR);
+    int a = fwrite((char *)newHash, 1, 32, *loc_ptr);
     return a;
 
     /* previous code */
@@ -138,7 +138,7 @@ int updateHash(FILE** loc_ptr, unsigned char newHash[32]){
     parameters: file name in a length 50 array
     return value: returns the hash in an unsigned char array
 */
-void hashFile(char fileName[50], unsigned char newHash[32]) {
+void hashFile(char fileName[50], unsigned char newHash[MD5_DIGEST_LENGTH]) {
     MD5_CTX c;
     char buf[512];
     ssize_t bytes;
@@ -151,8 +151,8 @@ void hashFile(char fileName[50], unsigned char newHash[32]) {
     MD5_Final(newHash, &c);
     fclose(fp);
 }
-void readHash(FILE** fp, unsigned char oldHash[32]) {
-    fseek(*fp, -32, SEEK_CUR);
+void readHash(FILE** fp, unsigned char oldHash[MD5_DIGEST_LENGTH]) {
+    fseek(*fp, -1 * MD5_DIGEST_LENGTH, SEEK_CUR);
     fread(oldHash, sizeof(char), 32, *fp);
 }
 void addHash(char *filename, unsigned char *newHash) {

@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 	FILE *newFile, *locationPointer;
 	struct sockaddr_in serv_addr;
 	char buff[BUFFER_SIZE], filename[50];
-	unsigned char fileHash[32];
+	unsigned char fileHash[MD5_DIGEST_LENGTH];
 	int bytesRead;
 	char	response_char = '\0';
 
