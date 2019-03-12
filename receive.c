@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 	char buff[BUFFER_SIZE], filename[50];
 	char fileHash[32];
 	int bytesRead;
-	char	response_char = '\0';
+	char response_char = '\0';
 
 	// set up socket on port defined in header.h (currently 8050)
 	memset (&serv_addr, '0', sizeof (serv_addr));

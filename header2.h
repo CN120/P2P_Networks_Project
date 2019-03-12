@@ -112,7 +112,7 @@ FILE* findHashLoc(char fileName[50]) {
         num = fscanf(fp, "%s %s", fn_store, hashVal);
         //printf("Current position is: %ld\n", ftell(fp));
         if(strcmp(fn_store, fileName)==0){
-            printf("found %s & %s\n", fn_store, hashVal);
+            printf("found %s with hash %s\n", fn_store, hashVal);
             return fp; //file pointer to ed of line with hash
         }
     } while(num!=EOF);
