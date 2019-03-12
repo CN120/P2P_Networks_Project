@@ -2,14 +2,14 @@
 Keegan Papakipos, Matti Masten,
 Justin Cole, Chris Nelson */
 
-#include "header.h"
+#include "header2.h"
 
 int main(int argc, char* argv[]) {
 	int listenfd = 0, connfd = 0;
 	FILE *newFile, *locationPointer;
 	struct sockaddr_in serv_addr;
 	char buff[BUFFER_SIZE], filename[50];
-	unsigned char fileHash[MD5_DIGEST_LENGTH];
+	char fileHash[32];
 	int bytesRead;
 	char	response_char = '\0';
 
