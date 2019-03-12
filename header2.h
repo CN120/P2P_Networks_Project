@@ -130,6 +130,7 @@ FILE* findHashLoc(char fileName[50]) {
 int updateHash(FILE* loc_ptr, char *newHash){
     fseek(loc_ptr, -1 * 32, SEEK_CUR);
     int a = fwrite(newHash, 1, 32, loc_ptr);
+    fclose(loc_ptr);
     return a;
 
     /* previous code */
