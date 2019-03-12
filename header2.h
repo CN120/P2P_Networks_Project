@@ -20,7 +20,7 @@ Justin Cole, Chris Nelson */
 #define BUFFER_SIZE 100
 
 // Send file and hash to a single peer with IP address peerIP
-int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
+int sendToPeer(char *fileName, char *hash, char *peerIP)
 {
      int socketfd, bytes_read;
      char	buffer[BUFFER_SIZE];
@@ -68,7 +68,7 @@ int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
      read (socketfd, buffer, 1);
 
      // Send hash of file to server
-     write(socketfd, (char *)hash, strlen((char *)hash));
+     write(socketfd, hash, strlen(hash));
      read (socketfd, buffer, 1);
 
      // Read from source file and transmit to server SIZE bytes
@@ -86,7 +86,7 @@ int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
 parameters: 50 length char filename, 32 length unsigned char hash
 runs sendToPeer on all peers listed in peers.txt
 */
-void sendToAllPeers(char fileName[50],  unsigned char hash[MD5_DIGEST_LENGTH]) {
+void sendToAllPeers(char fileName[50],  char hash[32]) {
     FILE* fp;
     char ip[15];
     fp = fopen("peers.txt", "rb");
@@ -103,11 +103,12 @@ void sendToAllPeers(char fileName[50],  unsigned char hash[MD5_DIGEST_LENGTH]) {
  */
 FILE* findHashLoc(char fileName[50]) {
     FILE* fp = fopen("hash.txt", "r+");
-    char hashVal[MD5_DIGEST_LENGTH];
+    char hashVal[32];
     char fn_store[50];  //will store filenames read in from fscanf
     int num;
     do {
         num = fscanf(fp, "%s %s", fn_store, hashVal);
+        //printf("Current position is: %ld\n", ftell(fp));
         if(strcmp(fn_store, fileName)==0){
             printf("found %s & %s\n", fn_store, hashVal);
             return fp; //file pointer to ed of line with hash
@@ -123,9 +124,9 @@ FILE* findHashLoc(char fileName[50]) {
  and a string of new hash value
  return value: returns non-negative value upon success, EOF on Error
  */
-int updateHash(FILE** loc_ptr, unsigned char newHash[MD5_DIGEST_LENGTH]){
-    fseek(*loc_ptr, -1 * MD5_DIGEST_LENGTH, SEEK_CUR);
-    int a = fwrite((char *)newHash, 1, MD5_DIGEST_LENGTH, *loc_ptr);
+int updateHash(FILE** loc_ptr, char newHash[32]){
+    fseek(*loc_ptr, -1 * 32, SEEK_CUR);
+    int a = fwrite(newHash, 1, 32, *loc_ptr);
     return a;
 
     /* previous code */
@@ -139,24 +140,29 @@ int updateHash(FILE** loc_ptr, unsigned char newHash[MD5_DIGEST_LENGTH]){
     parameters: file name in a length 50 array
     return value: returns the hash in an unsigned char array
 */
-void hashFile(char fileName[50], unsigned char newHash[MD5_DIGEST_LENGTH]) {
+void hashFile(char fileName[50], char newHash[32]) {
     MD5_CTX c;
     char buf[512];
     ssize_t bytes;
+    unsigned char newHashMD5[MD5_DIGEST_LENGTH];
     MD5_Init(&c);
     FILE* fp;
     fp = fopen(fileName, "rb");
     while((bytes = fread(buf, sizeof(char), 512, fp)) > 0) {
         MD5_Update(&c, buf, bytes);
     }
-    MD5_Final(newHash, &c);
+    MD5_Final(newHashMD5, &c);
+
+    for(int i = 0; i < 16; ++i)
+         sprintf(&newHash[i*2], "%02x", (unsigned int)newHashMD5[i]);
+
     fclose(fp);
 }
-void readHash(FILE** fp, unsigned char oldHash[MD5_DIGEST_LENGTH]) {
-    fseek(*fp, -1 * MD5_DIGEST_LENGTH, SEEK_CUR);
-    fread(oldHash, sizeof(char), MD5_DIGEST_LENGTH, *fp);
+void readHash(FILE** fp, char oldHash[32]) {
+    fseek(*fp, -1 * 32, SEEK_CUR);
+    fread(oldHash, sizeof(char), 32, *fp);
 }
-void addHash(char *filename, unsigned char *newHash) {
+void addHash(char *filename, char *newHash) {
     FILE *writefp = fopen("hash.txt", "a");
     fprintf(writefp, "\n%s %s", filename, newHash);
     fclose(writefp);

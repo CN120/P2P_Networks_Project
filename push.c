@@ -2,14 +2,15 @@
 Keegan Papakipos, Matti Masten,
 Justin Cole, Chris Nelson */
 
-#include "header.h"
+#include "header2.h"
 
 int main(int argc, char* argv[]) {
   FILE *readfp;
   char filename[50];
+  char oldHash[32], newHash[32];
   char directPath[50] = "./Repo/";
   struct dirent *de;
-  unsigned char oldHash[MD5_DIGEST_LENGTH], newHash[MD5_DIGEST_LENGTH];
+  //unsigned char oldHash[MD5_DIGEST_LENGTH], newHash[MD5_DIGEST_LENGTH];
   // open hash.txt for writing
       printf("%s\n", "opened hash");
   //open repo
@@ -26,18 +27,22 @@ int main(int argc, char* argv[]) {
 			strcat(filename, de->d_name);
 			printf("%s\n", filename);
 			hashFile(filename, newHash);
+               printf("new hash: %s\n", newHash);
+               //for (int i = 0; i < 33; ++i)
+               //     printf("%c", newHash[i]);
 			readfp = findHashLoc(filename);
 			if (readfp != NULL) {
 				readHash(&readfp, oldHash);
-				printf("%s\n", newHash);
-				printf("%s\n", oldHash);
-				if (memcmp(newHash, oldHash, MD5_DIGEST_LENGTH) != 0) {
+                    printf("old hash: %s", oldHash);
+                    //for(int i = 0; i < 32; ++i)
+                    //     printf("%c", oldHash[i]);
+				if (memcmp(newHash, oldHash, 32) != 0) {
 					printf("FILE UPDATED\n");
 					updateHash(&readfp, newHash);
 					sendToAllPeers(filename, newHash);
 				}
 			} else {
-				printf("%s\n", (char *)newHash);
+				printf("%s\n", newHash);
 				addHash(filename, newHash);
 				printf("sending\n");
 				printf("%s\n", newHash);
