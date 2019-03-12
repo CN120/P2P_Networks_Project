@@ -55,6 +55,7 @@ int sendToPeer(char *fileName, unsigned char *hash, char *peerIP)
         printf("connect error.\n");
          return 1;
     }
+    printf("connected successfully\n");
      // Open the source file for reading, display error if unsuccessful
      if ((src_fp = fopen (fileName, "rb")) == NULL)
      {
@@ -90,6 +91,7 @@ void sendToAllPeers(char fileName[50],  unsigned char hash[32]) {
     char ip[15];
     fp = fopen("peers.txt", "rb");
     while (fscanf(fp, "%s", ip) != EOF) {
+        printf("sending to peer\n");
         sendToPeer(fileName, hash, ip);
     }
     fclose(fp);
@@ -136,28 +138,22 @@ int updateHash(FILE** loc_ptr, unsigned char newHash[32]){
     parameters: file name in a length 50 array
     return value: returns the hash in an unsigned char array
 */
-unsigned char* hashFile(char fileName[50]) {
+void hashFile(char fileName[50], unsigned char newHash[32]) {
     MD5_CTX c;
     char buf[512];
     ssize_t bytes;
-    unsigned char* out = malloc (sizeof (char) * MD5_DIGEST_LENGTH);
     MD5_Init(&c);
     FILE* fp;
-
     fp = fopen(fileName, "rb");
     while((bytes = fread(buf, sizeof(char), 512, fp)) > 0) {
         MD5_Update(&c, buf, bytes);
     }
-
-    MD5_Final(out, &c);
+    MD5_Final(newHash, &c);
     fclose(fp);
-    return out;
 }
-unsigned char* readHash(FILE** fp) {
-    unsigned char* hash = malloc (sizeof (char) * MD5_DIGEST_LENGTH);
+void readHash(FILE** fp, unsigned char oldHash[32]) {
     fseek(*fp, -32, SEEK_CUR);
-    fread(hash, sizeof(char), 32, *fp);
-    return hash;
+    fread(oldHash, sizeof(char), 32, *fp);
 }
 void addHash(char *filename, unsigned char *newHash) {
     FILE *writefp = fopen("hash.txt", "a");

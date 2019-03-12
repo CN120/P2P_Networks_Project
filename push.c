@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
   char filename[50];
   char directPath[50] = "./Repo/";
   struct dirent *de;
-  unsigned char *oldHash, *newHash;
+  unsigned char oldHash[32], newHash[32];
   // open hash.txt for writing
       printf("%s\n", "opened hash");
   //open repo
@@ -25,10 +25,10 @@ int main(int argc, char* argv[]) {
 			strcpy(filename, directPath);
 			strcat(filename, de->d_name);
 			printf("%s\n", filename);
-			newHash = hashFile(filename);
+			hashFile(filename, newHash);
 			readfp = findHashLoc(filename);
 			if (readfp != NULL) {
-				oldHash = readHash(&readfp);
+				readHash(&readfp, oldHash);
 				printf("%s\n", newHash);
 				printf("%s\n", oldHash);
 				if (memcmp(newHash, oldHash, 32) != 0) {
@@ -36,7 +36,6 @@ int main(int argc, char* argv[]) {
 					updateHash(&readfp, newHash);
 					sendToAllPeers(filename, newHash);
 				}
-                free(oldHash);
 			} else {
 				printf("%s\n", (char *)newHash);
 				addHash(filename, newHash);
@@ -45,6 +44,5 @@ int main(int argc, char* argv[]) {
 				sendToAllPeers(filename, newHash);
 			}
 		}
-          free(newHash);
 	}
 }
