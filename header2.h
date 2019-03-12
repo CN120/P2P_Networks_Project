@@ -68,11 +68,11 @@ int sendToPeer(char fileName[50], char hash[32], char *peerIP)
      write (socketfd, fileName, strlen(fileName)+1);
      read (socketfd, buffer, 1);
 
-     // Send hash of file to server
+     /*// Send hash of file to server
      printf("About to send hash: %s\n", hash);
      //printf("%s\n", hash);
      write(socketfd, hash, 32);
-     read (socketfd, buffer, 1);
+     read (socketfd, buffer, 1);*/
 
      // Read from source file and transmit to server SIZE bytes
      // at a time
@@ -130,6 +130,7 @@ FILE* findHashLoc(char fileName[50]) {
 int updateHash(FILE* loc_ptr, char *newHash){
     fseek(loc_ptr, -1 * 32, SEEK_CUR);
     int a = fwrite(newHash, 1, 32, loc_ptr);
+    fclose(loc_ptr);
     return a;
 
     /* previous code */
