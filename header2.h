@@ -70,7 +70,8 @@ int sendToPeer(char fileName[50], char hash[32], char *peerIP)
 
      // Send hash of file to server
      printf("About to send hash: %s\n", hash);
-     write(socketfd, hash, strlen(hash)+1);
+     //printf("%s\n", hash);
+     write(socketfd, hash, 32);
      read (socketfd, buffer, 1);
 
      // Read from source file and transmit to server SIZE bytes
@@ -104,7 +105,7 @@ void sendToAllPeers(char fileName[50],  char hash[32]) {
  return value: a FILE pointer to the location immediately after the found hash
  */
 FILE* findHashLoc(char fileName[50]) {
-    FILE* fp = fopen("hash.txt", "r+");
+    FILE* fp = fopen("./hash.txt", "r+");
     char hashVal[32];
     char fn_store[50];  //will store filenames read in from fscanf
     int num;
@@ -126,9 +127,9 @@ FILE* findHashLoc(char fileName[50]) {
  and a string of new hash value
  return value: returns non-negative value upon success, EOF on Error
  */
-int updateHash(FILE** loc_ptr, char newHash[32]){
-    fseek(*loc_ptr, -1 * 32, SEEK_CUR);
-    int a = fwrite(newHash, 1, 32, *loc_ptr);
+int updateHash(FILE* loc_ptr, char *newHash){
+    fseek(loc_ptr, -1 * 32, SEEK_CUR);
+    int a = fwrite(newHash, 1, 32, loc_ptr);
     return a;
 
     /* previous code */
@@ -160,7 +161,7 @@ void hashFile(char fileName[50], char newHash[32]) {
 
     fclose(fp);
 }
-void readHash(FILE** fp, char oldHash[32]) {
+void readHash(FILE** fp, char *oldHash) {
     fseek(*fp, -1 * 32, SEEK_CUR);
     fread(oldHash, sizeof(char), 32, *fp);
 }
