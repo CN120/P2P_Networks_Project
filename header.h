@@ -124,7 +124,7 @@ FILE* findHashLoc(char fileName[50]) {
  */
 int updateHash(FILE** loc_ptr, unsigned char newHash[MD5_DIGEST_LENGTH]){
     fseek(*loc_ptr, -1 * MD5_DIGEST_LENGTH, SEEK_CUR);
-    int a = fwrite((char *)newHash, 1, 32, *loc_ptr);
+    int a = fwrite((char *)newHash, 1, MD5_DIGEST_LENGTH, *loc_ptr);
     return a;
 
     /* previous code */
@@ -153,7 +153,7 @@ void hashFile(char fileName[50], unsigned char newHash[MD5_DIGEST_LENGTH]) {
 }
 void readHash(FILE** fp, unsigned char oldHash[MD5_DIGEST_LENGTH]) {
     fseek(*fp, -1 * MD5_DIGEST_LENGTH, SEEK_CUR);
-    fread(oldHash, sizeof(char), 32, *fp);
+    fread(oldHash, sizeof(char), MD5_DIGEST_LENGTH, *fp);
 }
 void addHash(char *filename, unsigned char *newHash) {
     FILE *writefp = fopen("hash.txt", "a");
