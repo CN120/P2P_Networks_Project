@@ -5,50 +5,49 @@ Justin Cole, Chris Nelson */
 #include "header2.h"
 
 int main(int argc, char* argv[]) {
-  FILE *readfp;
-  char filename[50];
-  char oldHash[33], newHash[32];
-  char directPath[50] = "./Repo/";
-  struct dirent *de;
-  //unsigned char oldHash[MD5_DIGEST_LENGTH], newHash[MD5_DIGEST_LENGTH];
-  // open hash.txt for writing
-      printf("%s\n", "opened hash");
-  //open repo
-  DIR *dr = opendir("./Repo");
-        printf("%s\n", "opened directory\n\n");
+     FILE *readfp;
+     char filename[50];
+     char oldHash[33], newHash[32];
+     char directPath[50] = "./Repo/";
+     struct dirent *de;
 
-  // save old filename and hash
-  //fscanf(hashfp, "%s %s\n", filename, oldHash) != EOF
-	while ((de = readdir(dr)) != NULL) {
-	// new hash
-		if (de->d_name[0] != '.') {
-			memset(filename, 0, 50);
-			strcpy(filename, directPath);
-			strcat(filename, de->d_name);
-			printf("\n\nNow dealing with file: %s\n", filename);
-			hashFile(filename, newHash);
-               printf("new hash: %s\n", newHash);
-               //for (int i = 0; i < 33; ++i)
-               //     printf("%c", newHash[i]);
-			readfp = findHashLoc(filename);
-			if (readfp != NULL) {
-				readHash(&readfp, oldHash);
+     //Open Repo, the synced repository
+     DIR *dr = opendir("./Repo");
+
+     // Loop through every file in Repo
+     while ((de = readdir(dr)) != NULL) {
+          if (de->d_name[0] != '.') {        // Skip hidden files
+
+               // Initialize and construct file name
+               memset(filename, 0, 50);
+               strcpy(filename, directPath);
+               strcat(filename, de->d_name);
+
+               // Hash the file and find its location in hash.txt
+               hashFile(filename, newHash);
+               readfp = findHashLoc(filename);
+
+               // If file is not new, get its old hash
+               if (readfp != NULL) {
+                    readHash(&readfp, oldHash);
                     oldHash[32] = '\0';
-                    printf("old hash: %s\n", oldHash);
-                    //for(int i = 0; i < 32; ++i)
-                    //     printf("%c", oldHash[i]);
-				if (memcmp(newHash, oldHash, 32) != 0) {
-					printf("\nFILE UPDATED\n");
-					updateHash(readfp, newHash);
-					sendToAllPeers(filename, newHash);
-				}
-			} else {
-				//printf("%s\n", newHash);
-				addHash(filename, newHash);
-				//printf("sending\n");
-				//printf("%s\n", newHash);
-				sendToAllPeers(filename, newHash);
-			}
-		}
-	}
+
+                    // If file has been changed, update its hash and send to peers
+               	if (memcmp(newHash, oldHash, 32) != 0) {
+               		printf("\nThe file %s has been updated.\n", filename);
+               		updateHash(readfp, newHash);
+               		sendToAllPeers(filename, newHash);
+                         printf("Synced with peers.\n");
+                    }
+
+               // If file is new, add its hash and send to peers
+               } else {
+                    printf("\nThe file %s is new.\n", filename);
+                    addHash(filename, newHash);
+                    sendToAllPeers(filename, newHash);
+                    printf("Synced with peers.\n");
+               }
+          }
+     }
+     return 0;
 }

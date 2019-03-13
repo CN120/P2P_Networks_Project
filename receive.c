@@ -5,22 +5,23 @@ Justin Cole, Chris Nelson */
 #include "header2.h"
 
 int main(int argc, char* argv[]) {
-	int listenfd = 0, connfd = 0;
+	int listenfd = 0, connfd = 0, bytesRead;
 	FILE *newFile, *locationPointer;
 	struct sockaddr_in serv_addr;
 	char buff[BUFFER_SIZE], filename[50];
-	char fileHash[33], fileHash2[32];
-	int bytesRead, name_length;
-	char c;
-	char response_char = '\0';
+	char fileHash[33], response_char = '\0';
 
+	// Set last byte of hash to \0 to make it a string
 	fileHash[32] = '\0';
-	// set up socket on port defined in header.h (currently 8050)
+
+	// set up TCP socket on port defined in header2.h
+	// Accept connections from all IPs
 	memset (&serv_addr, '0', sizeof (serv_addr));
 	memset (buff, '0', sizeof (buff));
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = htonl (INADDR_ANY);
 	serv_addr.sin_port = htons (PORT);
+
 	// create socket, bind, and listen
 	if ((listenfd = socket (AF_INET, SOCK_STREAM, 0)) < 0) {
 		printf ("socket error\n");
@@ -41,51 +42,38 @@ int main(int argc, char* argv[]) {
 			printf ("accept error\n");
 			return 1;
 		}
-		// receive filename, open file for writing
-		read(connfd, buff, sizeof(filename));
-		//read (connfd, filename, sizeof(filename));
-		write (connfd, &response_char, 1);
-		printf("\n\nReceived filename = %s\n", buff);
 
-		name_length = 0;
-		while((c = buff[name_length]) != '0')
-		{
-			name_length++;
-		}
+		read(connfd, buff, sizeof(filename)); // receive filename
 
-		memcpy (filename, buff, name_length);
-		filename[name_length] = '\0';   /* null character manually added */
+		write (connfd, &response_char, 1);    // send response to peer
 
+		// Copy filename from buffer, find filename in hash.txt, and open file
+		memcpy(filename, buff, 50);
 		locationPointer = findHashLoc(filename);
 		newFile = fopen(filename, "w");
 
+		// Clear buffer
 		memset (buff, '0', sizeof (buff));
-		// receive file hash, find hash location, update hash
-		read(connfd, buff, 32);
-		//read(connfd, fileHash, sizeof(fileHash));
-		write (connfd, &response_char, 1);
-		memcpy (fileHash, buff, 32);
-		//fileHash[32] = '\0';
-		printf("Received hash = %s\n", fileHash);
-		//printf("buffer version: %s\n", buff);
+
+		read(connfd, buff, 32);				// receive file hash
+		write (connfd, &response_char, 1);		// send response to peer
+		memcpy (fileHash, buff, 32);			// copy hash from buffer
 
 		if (locationPointer == NULL) {
-			addHash(filename, fileHash);
+			addHash(filename, fileHash);		// If file not in hash.txt, add it
 		} else {
-			//memcpy(fileHash2, fileHash, 32);
-			updateHash(locationPointer, fileHash);
+			updateHash(locationPointer, fileHash);	// If file is present, update hash
 		}
 
-		memset (buff, '0', sizeof (buff));
+		memset (buff, '0', sizeof (buff));		// Clear buffer
+
+		// Receive contents and write them to the file
 		while ((bytesRead = read (connfd, buff, sizeof (buff))) > 0) {
-			printf("Got into reading the file.\n");
-			//printf("Buffer contains: %s\n", buff);
-			// append received data to file TODO
 			fwrite(buff, sizeof(char), bytesRead, newFile);
 		}
-		// close connection
-		fclose(newFile);
-		close (connfd);
+
+		fclose(newFile);	// Close file
+		close (connfd);	// Close TCP connection
 	}
 	return 0;
 }
