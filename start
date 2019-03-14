@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-chmod +x receive
-chmod +x push
+gcc -Wall -lcrypto -lssl receive.c -o receive
+gcc -Wall -lcrypto -lssl push.c -o push
 chmod +x end
 ./receive &
