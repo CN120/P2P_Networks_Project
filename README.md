@@ -9,15 +9,19 @@ Running on DC Linux machines:
 2. Run: git clone https://github.com/Chris300127/P2P_Networks_Project.git
 
 3. All peers run: "hostname -i" to get everyone's machine's IP address.
-4. All peers send their IPs to a designated peer. Only one peer in the group needs
-to know everyone's IPs.
-  Note: peers.txt is a file in the synced repository. The easiest way to set up
-  the first time is for everyone to send their IP address to one designated peer.
-  That peer then fills peers.txt with those IPs, runs ./start, then runs ./push.
+4. All peers send their IPs to a designated peer. Only one peer in the group
+needs to know everyone's IPs.
+  Note: All peers need to have a peers.txt file that has all peers' IP
+  addresses. peers.txt is a synced file, so the easiest way to accomplish this
+  is for everyone to send their IP address to one designated peer. That peer
+  then fills peers.txt with those IPs, runs "./start", then runs "./push" ONLY
+  ONCE ALL PEERS HAVE RUN "./start". So the designated peer should only run
+  "./push" in step 8.
 5. Navigate to the top level of the git repository (cd P2P_Networks_Project).
-6. The designated peer must open "peers.txt" and fill it with all of their peers' IPs.
-  For example, if there are 3 peers total in the group with IPs 1.1.1.1, 2.2.2.2,
-  and 3.3.3.3, then everyone's peers.txt file should read:
+6. The designated peer must open "peers.txt" and fill it with all of their
+peers' IPs.
+  For example, if there are 3 peers total in the group with IPs 1.1.1.1,
+  2.2.2.2, and 3.3.3.3, then everyone's peers.txt file should read:
 
   1.1.1.1
   2.2.2.2
