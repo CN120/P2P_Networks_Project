@@ -89,7 +89,7 @@ int sendToPeer(char fileName[50], char hash[32], char *peerIP)
 void sendToAllPeers(char fileName[50],  char hash[32]) {
     FILE* fp;
     char ip[15];
-    fp = fopen("peers.txt", "rb");
+    fp = fopen("Repo/peers.txt", "rb");
     while (fscanf(fp, "%s", ip) != EOF) {
         sendToPeer(fileName, hash, ip);
     }
