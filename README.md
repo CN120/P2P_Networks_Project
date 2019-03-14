@@ -4,8 +4,9 @@ Description:
 Peer to peer file syncing over TCP
 
 Running on DC Linux machines:
+Navigate to the folder you want to download the git repo in.
 git clone https://github.com/Chris300127/P2P_Networks_Project.git
-Everyone run "hostname -i" to get your machine's IP address.
+All peers run "hostname -i" to get everyone's machine's IP address.
 Send your IP to all your peers.
 Everyone open "peers.txt" and fill it with all of your peers' IPs.
   For example, if there are 3 peers with IPs 1.1.1.1, 2.2.2.2, and 3.3.3.3,
