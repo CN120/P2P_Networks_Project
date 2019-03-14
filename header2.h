@@ -14,6 +14,7 @@ Justin Cole, Chris Nelson */
 #include <arpa/inet.h>
 #include <openssl/md5.h>
 #include <dirent.h>
+#include "getIP.h"
 
 #define PORT 8050
 #define BUFFER_SIZE 100
@@ -26,9 +27,9 @@ return value: returns 0 on success, 1 on error
 int sendToPeer(char fileName[50], char hash[32], char *peerIP)
 {
      int socketfd, bytes_read;
-     char	buffer[BUFFER_SIZE];
+     char   buffer[BUFFER_SIZE];
      struct sockaddr_in server_address;
-     FILE	*src_fp;
+     FILE   *src_fp;
 
      // Initialize buffer and IP address with 0s
      memset (buffer, '0', sizeof (buffer));
@@ -86,12 +87,22 @@ int sendToPeer(char fileName[50], char hash[32], char *peerIP)
  Sends file contents and hash to all IPs in peers.txt
  parameters: 50 length char filename, 32 length unsigned char hash
 */
+
 void sendToAllPeers(char fileName[50],  char hash[32]) {
     FILE* fp;
     char ip[15];
+    char *myIP;
+    char termIP[16];
     fp = fopen("Repo/peers.txt", "rb");
+    myIP = getIP();
     while (fscanf(fp, "%s", ip) != EOF) {
-        sendToPeer(fileName, hash, ip);
+        memcpy(termIP, ip, 15);
+        termIP[16] = '\0';
+        printf("the ip is: %s\n", ip);
+        if (memcmp(ip, myIP, strlen(termIP)) != 0) {
+            printf("sending\n");
+            sendToPeer(fileName, hash, ip);
+        }
     }
     fclose(fp);
 }
