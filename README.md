@@ -34,7 +34,7 @@ the P2P_Networks_Project/repo and calling "./push" to push their changes. The
 application is now running and fully functional.
 9. Once a peer is done and wants to end their application, they run "./end".
 
-Compilation on DC Linux machines (shouldn't be necessary, but including
+Compilation on DC Linux machines (this really shouldn't be necessary, but we're including
 instructions just in case the executable doesn't work for some reason):
 Compilation requires the openssl library to be installed, but you shouldn't need
 to deal with this since the DC machines already have it.
